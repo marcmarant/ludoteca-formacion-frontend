@@ -5,6 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogConfirmation } from '@/app/core/dialog-confirmation';
 import { CategoryEdit } from '../category-edit';
 import { CategoryService } from '../category';
 import { Category } from '../model/category';
@@ -45,4 +46,28 @@ export class CategoryList implements OnInit {
             this.ngOnInit();
         });    
     }
+
+    editCategory(category: Category) {
+        const dialogRef = this.dialog.open(CategoryEdit, {
+        data: { category }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        this.ngOnInit();
+        });
+    }
+
+    deleteCategory(category: Category) {    
+        const dialogRef = this.dialog.open(DialogConfirmation, {
+        data: { title: "Eliminar categoría", description: "Atención si borra la categoría se perderán sus datos.<br> ¿Desea eliminar la categoría?" }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+            this.categoryService.deleteCategory(category.id).subscribe(result => {
+            this.ngOnInit();
+            }); 
+        }
+        });
+    }  
 }

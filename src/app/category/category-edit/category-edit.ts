@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,8 +19,13 @@ export class CategoryEdit {
 
     constructor(
         public dialogRef: MatDialogRef<CategoryEdit>,
+        @Inject(MAT_DIALOG_DATA) public data: {category : Category},
         private categoryService: CategoryService
     ) {}
+
+    ngOnInit(): void {
+        this.category = this.data.category != null ? this.data.category : {} as Category;
+    }
 
     onSave() {
         this.categoryService.saveCategory(this.category).subscribe(() => {
