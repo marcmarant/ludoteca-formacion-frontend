@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GameEdit } from '../game-edit';
 import { GameService } from '../game';
@@ -34,7 +34,7 @@ import { GameItem } from './game-item/game-item';
 })
 export class GameList implements OnInit {
     categories: Category[] = [];
-    games: Game[] = [];
+    games = signal<Game[]>([]);
     filterCategory: Category = {} as Category;
     filterTitle = '';
 
@@ -45,7 +45,7 @@ export class GameList implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.gameService.getGames().subscribe((games) => (this.games = games));
+        this.gameService.getGames().subscribe((games) => this.games.set(games));
 
         this.categoryService
             .getCategories()
@@ -65,7 +65,7 @@ export class GameList implements OnInit {
 
         this.gameService
             .getGames(title, categoryId)
-            .subscribe((games) => (this.games = games));
+            .subscribe((games) => this.games.set(games));
     }
 
     createGame() {
