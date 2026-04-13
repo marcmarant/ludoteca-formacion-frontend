@@ -31,7 +31,7 @@
     </div>
 
     <div class="game-list">
-        @for (game of games; track game.id) {
+        @for (game of games(); track game.id) {
             <app-game-item (click)="editGame(game)" [game]="game" />
         }
     </div>
