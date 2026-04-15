@@ -13,6 +13,10 @@
           "style": "scss",
           "type": "",
           "addTypeToClassName": false
+        },
+        "@schematics/angular:service": {
+          "type": "service",
+          "addTypeToClassName": true
         }
       },
       "root": "",
