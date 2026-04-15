@@ -1,0 +1,32 @@
+<div class="container">
+    <h1>Iniciar sesión</h1>
+
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline">
+        <mat-label>Usuario</mat-label>
+        <input
+            matInput
+            type="text"
+            formControlName="username"
+            required
+            autocomplete="username"
+        />
+        <mat-error>Introduce un nombre de usuario</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input
+            matInput
+            type="password"
+            formControlName="password"
+            required
+            minlength="5"
+            autocomplete="current-password"
+        />
+        <mat-error>La contraseña debe tener al menos 5 caracteres</mat-error>
+        </mat-form-field>
+    </form>
+
+    <button mat-flat-button color="primary" (click)="onSubmit()">Continuar</button>
+</div>

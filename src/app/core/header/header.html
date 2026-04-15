@@ -19,8 +19,16 @@
                 </div>
             </div>
 
-            <div class="header_login">
-                <mat-icon>account_circle</mat-icon> Sign in
+            <div class="header_auth">
+                @if(authService.isAuthenticated()) {
+                    <button mat-button (click)="onLogout()">
+                        <mat-icon>logout</mat-icon> Logout
+                    </button>
+                } @else {
+                    <a routerLink="/auth" routerLinkActive="active">
+                        <mat-icon>account_circle</mat-icon> Sign in
+                    </a>
+                }
             </div>
         </div>
     </mat-toolbar-row>

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AuthService } from '@/app/auth/auth';
 
 @Component({
     selector: 'app-header',
@@ -15,4 +16,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     templateUrl: './header.html',
     styleUrl: './header.scss'
 })
-export class Header {}
+export class Header {
+    authService = inject(AuthService);
+
+    onLogout(): void {
+        this.authService.logout();
+    }
+}
