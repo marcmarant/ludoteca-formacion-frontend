@@ -7,8 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogConfirmation } from '@/app/core/dialog-confirmation';
 import { CategoryEdit } from '../category-edit';
-import { CategoryService } from '../category';
+import { CategoryService } from '../category.service';
 import { Category } from '../model/category';
+import { AuthService } from '@/app/auth/auth.service';
 
 @Component({
     selector: 'app-category-list',
@@ -28,6 +29,7 @@ export class CategoryList implements OnInit {
 
     constructor(
         private categoryService: CategoryService,
+        public authService: AuthService,
         public dialog: MatDialog
     ) {}
 

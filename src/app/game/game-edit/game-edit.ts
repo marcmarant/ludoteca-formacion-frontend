@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GameService } from '../game';
+import { GameService } from '../game.service';
 import { Game } from '../model/game';
-import { AuthorService } from '@/app/author/author';
+import { AuthorService } from '@/app/author/author.service';
 import { Author } from '@/app/author/model/author';
-import { CategoryService } from '@/app/category/category';
+import { CategoryService } from '@/app/category/category.service';
 import { Category } from '@/app/category/model/category';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';

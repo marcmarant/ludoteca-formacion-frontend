@@ -1,9 +1,9 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GameEdit } from '../game-edit';
-import { GameService } from '../game';
+import { GameService } from '../game.service';
 import { Game } from '../model/game';
-import { CategoryService } from '@/app/category/category';
+import { CategoryService } from '@/app/category/category.service';
 import { Category } from '@/app/category/model/category';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { GameItem } from './game-item/game-item';
+import { AuthService } from '@/app/auth/auth.service';
 
 @Component({
     selector: 'app-game-list',
@@ -41,6 +42,7 @@ export class GameList implements OnInit {
     constructor(
         private gameService: GameService,
         private categoryService: CategoryService,
+        public authService: AuthService,
         public dialog: MatDialog
     ) {}
 
@@ -79,6 +81,8 @@ export class GameList implements OnInit {
     }
 
     editGame(game: Game) {
+        if (!this.authService.isAuthenticated()) return;
+
         const dialogRef = this.dialog.open(GameEdit, {
             data: { game: game },
         });

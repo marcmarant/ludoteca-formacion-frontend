@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { AuthService } from '@/app/auth/auth';
+import { AuthService } from '@/app/auth/auth.service';
 
 @Component({
     selector: 'app-header',

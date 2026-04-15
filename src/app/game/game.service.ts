@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Game } from './model/game';
 import { HttpClient } from '@angular/common/http';
+import environment from '@/enviroment';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class GameService {
     constructor(private http: HttpClient) {}
 
-    private baseUrl = 'http://localhost:8080/games';
+    private baseUrl = `${environment.apiUrl}/games`;
 
     getGames(title?: string, categoryId?: number): Observable<Game[]> {
         return this.http.get<Game[]>(this.composeFindUrl(title, categoryId));

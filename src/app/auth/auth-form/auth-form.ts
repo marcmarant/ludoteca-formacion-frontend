@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angu
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService, AuthRequest } from '../auth';
+import { AuthService, AuthRequest } from '../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -31,7 +31,6 @@ export class AuthForm {
 
     onSubmit() {
         if (this.form.invalid) return;
-        console.log(this.form.value);
         this.authService.login(this.form.value as AuthRequest).subscribe({
             next: (token) => {
                 this.authService.setAuthenticated(token);

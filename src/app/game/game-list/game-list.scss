@@ -31,8 +31,15 @@
     .buttons {
         text-align: right;
     }
+
+    .bottom-buttons {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        text-align: right;
+    }
 }
 
 button {
-    width: 125px;
+    width: 150px;
 }
