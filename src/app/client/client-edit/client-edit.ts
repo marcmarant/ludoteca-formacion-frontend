@@ -4,12 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { CategoryService } from '../category.service';
-import { Category } from '../model/category';
+import { ClientService } from '../client.service';
+import { Client } from '../model/client';
 
 @Component({
-    selector: 'app-category-edit',
-    standalone: true,
+    selector: 'app-client-edit',
     imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -17,24 +16,24 @@ import { Category } from '../model/category';
         MatInputModule,
         MatButtonModule
     ],
-    templateUrl: './category-edit.html',
-    styleUrl: './category-edit.scss'
+    templateUrl: './client-edit.html',
+    styleUrl: './client-edit.scss',
 })
-export class CategoryEdit {
-    category: Category = {} as Category;
+export class ClientEdit {
+    client: Client = {} as Client;
 
     constructor(
-        public dialogRef: MatDialogRef<CategoryEdit>,
-        @Inject(MAT_DIALOG_DATA) public data: {category : Category},
-        private categoryService: CategoryService
+        public dialogRef: MatDialogRef<ClientEdit>,
+        @Inject(MAT_DIALOG_DATA) public data: {client : Client},
+        private clientService: ClientService
     ) {}
 
     ngOnInit(): void {
-        this.category = this.data.category ? Object.assign({}, this.data.category) : {} as Category;
+        this.client = this.data.client ? Object.assign({}, this.data.client) : {} as Client;
     }
 
     onSave() {
-        this.categoryService.saveCategory(this.category).subscribe(() => {
+        this.clientService.saveClient(this.client).subscribe(() => {
             this.dialogRef.close();
         });
     }

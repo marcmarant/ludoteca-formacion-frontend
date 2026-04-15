@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from './model/category';
 import environment from '@/enviroment';
 
 @Injectable({
-providedIn: 'root'
+    providedIn: 'root'
 })
 export class CategoryService { 
     constructor(private http: HttpClient) {}

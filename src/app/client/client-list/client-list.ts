@@ -6,41 +6,41 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogConfirmation } from '@/app/core/dialog-confirmation';
-import { CategoryEdit } from '../category-edit';
-import { CategoryService } from '../category.service';
-import { Category } from '../model/category';
+import { ClientEdit } from '../client-edit';
+import { ClientService } from '../client.service';
+import { Client } from '../model/client';
 import { AuthService } from '@/app/auth/auth.service';
 
 @Component({
-    selector: 'app-category-list',
+    selector: 'app-client-list',
     imports: [
         MatButtonModule,
         MatIconModule,
         MatTableModule,
         CommonModule
     ],
-    templateUrl: './category-list.html',
-    styleUrl: './category-list.scss',
+    templateUrl: './client-list.html',
+    styleUrl: './client-list.scss',
 })
-export class CategoryList implements OnInit {
-    
-    dataSource = new MatTableDataSource<Category>();
+export class ClientList implements OnInit {
+
+    dataSource = new MatTableDataSource<Client>();
     displayedColumns: string[] = ['id', 'name', 'action'];
 
     constructor(
-        private categoryService: CategoryService,
+        private clientService: ClientService,
         public authService: AuthService,
         public dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
-        this.categoryService.getCategories().subscribe(
-            categories => this.dataSource.data = categories
+        this.clientService.getClients().subscribe(
+            clients => this.dataSource.data = clients
         )
     }
 
-    createCategory() {
-        const dialogRef = this.dialog.open(CategoryEdit, {
+    createClient() {
+        const dialogRef = this.dialog.open(ClientEdit, {
             data: {}
         });
 
@@ -49,23 +49,24 @@ export class CategoryList implements OnInit {
         });    
     }
 
-    editCategory(category: Category) {
-        const dialogRef = this.dialog.open(CategoryEdit, {
-            data: { category }
+    editClient(client: Client) {
+        const dialogRef = this.dialog.open(ClientEdit, {
+            data: { client }
         });
 
         dialogRef.afterClosed().subscribe(() => this.ngOnInit());
     }
+    
 
-    deleteCategory(category: Category) {    
+    deleteClient(client: Client) {    
         const dialogRef = this.dialog.open(DialogConfirmation, {
-            data: { title: "Eliminar categoría", description: "Atención si borra la categoría se perderán sus datos.<br> ¿Desea eliminar la categoría?" }
+            data: { title: "Eliminar cliente", description: "Atención si borra el cliente se perderán sus datos.<br> ¿Desea eliminar el cliente?" }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.categoryService.deleteCategory(category.id).subscribe(() => this.ngOnInit()); 
+                this.clientService.deleteClient(client.id).subscribe(() => this.ngOnInit()); 
             }
         });
-    }  
+    }
 }

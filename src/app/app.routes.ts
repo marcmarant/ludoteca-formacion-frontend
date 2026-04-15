@@ -5,5 +5,6 @@ export const routes: Routes = [
     { path: 'auth', loadComponent: () => import('@/app/auth/auth-form').then(m => m.AuthForm)},
     { path: 'categories', loadComponent: () => import('@/app/category/category-list').then(m => m.CategoryList)},
     { path: 'authors', loadComponent: () => import('@/app/author/author-list').then(m => m.AuthorList)},
-    { path: 'games', loadComponent: () => import('@/app/game/game-list').then(m => m.GameList)}
+    { path: 'games', loadComponent: () => import('@/app/game/game-list').then(m => m.GameList)},
+    { path: 'clients', loadComponent: () => import('@/app/client/client-list').then(m => m.ClientList)}
 ];
