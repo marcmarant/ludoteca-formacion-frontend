@@ -28,5 +28,9 @@
         </mat-form-field>
     </form>
 
+    @if (apiErrorMessage()) {
+        <div class="api-error">{{ apiErrorMessage() }}</div>
+    }
+
     <button mat-flat-button color="primary" (click)="onSubmit()">Continuar</button>
 </div>

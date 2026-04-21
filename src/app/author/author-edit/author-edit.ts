@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthorService } from '../author.service';
 import { Author } from '../model/author';
@@ -6,6 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { HttpErrorResponse } from '@angular/common/http';
+import { getErrorMessage } from '@/app/core/utils/http-error';
+
 
 @Component({
     selector: 'app-author-edit',
@@ -16,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class AuthorEdit implements OnInit {
     author: Author = {} as Author;
+    apiErrorMessage = signal<string>('');
 
     constructor(
         public dialogRef: MatDialogRef<AuthorEdit>,
@@ -27,9 +31,16 @@ export class AuthorEdit implements OnInit {
         this.author = this.data.author ? Object.assign({}, this.data.author) : {} as Author;
     }
 
-    onSave() {
-        this.authorService.saveAuthor(this.author).subscribe(() => {
-            this.dialogRef.close();
+    onSave(): void {
+        this.apiErrorMessage.set('');
+
+        this.authorService.saveAuthor(this.author).subscribe({
+            next: () => {
+                this.dialogRef.close();
+            },
+            error: (error: HttpErrorResponse) => {
+                this.apiErrorMessage.set(getErrorMessage(error));
+            }
         });
     }
 

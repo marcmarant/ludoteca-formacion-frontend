@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameService } from '../game.service';
 import { Game } from '../model/game';
@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { HttpErrorResponse } from '@angular/common/http';
+import { getErrorMessage } from '@/app/core/utils/http-error';
 
 @Component({
     selector: 'app-game-edit',
@@ -23,6 +25,7 @@ export class GameEdit implements OnInit {
     game: Game = {} as Game;
     authors: Author[] = [];
     categories: Category[] = [];
+    apiErrorMessage = signal<string>('');
 
     constructor(
         public dialogRef: MatDialogRef<GameEdit>,
@@ -62,9 +65,16 @@ export class GameEdit implements OnInit {
         });
     }
 
-    onSave() {
-        this.gameService.saveGame(this.game).subscribe((result) => {
-            this.dialogRef.close();
+    onSave(): void {
+        this.apiErrorMessage.set('');
+
+        this.gameService.saveGame(this.game).subscribe({
+            next: () => {
+                this.dialogRef.close();
+            },
+            error: (error: HttpErrorResponse) => {
+                this.apiErrorMessage.set(getErrorMessage(error));
+            },
         });
     }
 

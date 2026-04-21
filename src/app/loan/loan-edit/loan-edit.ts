@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,8 @@ import { GameService } from '@/app/game/game.service';
 import { Game } from '@/app/game/model/game';
 import { ClientService } from '@/app/client/client.service';
 import { Client } from '@/app/client/model/client';
+import { HttpErrorResponse } from '@angular/common/http';
+import { getErrorMessage } from '@/app/core/utils/http-error';
 
 @Component({
     selector: 'app-loan-edit',
@@ -29,6 +31,7 @@ export class LoanEdit implements OnInit {
     loan: Loan = {} as Loan;
     games: Game[] = [];
     clients: Client[] = [];
+    apiErrorMessage = signal<string>('');
 
     constructor(
         public dialogRef: MatDialogRef<LoanEdit>,
@@ -69,8 +72,13 @@ export class LoanEdit implements OnInit {
     }
 
     onSave(): void {
-        this.loanService.saveLoan(this.loan).subscribe(() => {
-            this.dialogRef.close();
+        this.loanService.saveLoan(this.loan).subscribe({
+            next: () => {
+                this.dialogRef.close();
+            },
+            error: (error: HttpErrorResponse) => {
+                this.apiErrorMessage.set(getErrorMessage(error));
+            },
         });
     }
 
