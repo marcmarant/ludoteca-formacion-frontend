@@ -100,9 +100,9 @@ export class AuthorList implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.authorService.deleteAuthor(author.id).subscribe((result) => {
-                    this.ngOnInit();
-                });
+                this.authorService.deleteAuthor(author.id).subscribe(
+                    () => this.ngOnInit(),
+                );
             }
         });
     }

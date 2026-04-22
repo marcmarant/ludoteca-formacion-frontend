@@ -62,9 +62,11 @@ export class CategoryList implements OnInit {
             data: { title: "Eliminar categoría", description: "Atención si borra la categoría se perderán sus datos.<br> ¿Desea eliminar la categoría?" }
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.categoryService.deleteCategory(category.id).subscribe(() => this.ngOnInit()); 
+                this.categoryService.deleteCategory(category.id).subscribe(
+                    () => this.ngOnInit(),
+                );
             }
         });
     }  
