@@ -5,7 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogConfirmation } from '@/app/core/dialog-confirmation';
+import { DialogConfirmation } from '@/app/core/components/dialog-confirmation';
 import { CategoryEdit } from '../category-edit';
 import { CategoryService } from '../category.service';
 import { Category } from '../model/category';

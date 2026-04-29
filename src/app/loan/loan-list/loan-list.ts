@@ -6,7 +6,7 @@ import { LoanEdit } from '../loan-edit/loan-edit';
 import { LoanService } from '../loan.service';
 import { Loan } from '../model/loan';
 import { Pageable } from '@/app/core/model/page/pageable';
-import { DialogConfirmation } from '@/app/core/dialog-confirmation';
+import { DialogConfirmation } from '@/app/core/components/dialog-confirmation';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
