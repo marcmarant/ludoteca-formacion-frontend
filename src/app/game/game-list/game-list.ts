@@ -20,16 +20,16 @@ import { AuthService } from '@/app/auth/auth.service';
     selector: 'app-game-list',
     standalone: true,
     imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatTableModule,
-        CommonModule,
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        GameItem
-    ],
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    GameItem
+],
     templateUrl: './game-list.html',
     styleUrl: './game-list.scss',
 })

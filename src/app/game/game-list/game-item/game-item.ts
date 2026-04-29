@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { AuthService } from '@/app/auth/auth.service';
 import { Game } from '../../model/game';
-import {MatCardModule} from '@angular/material/card';
 
 @Component({
     selector: 'app-game-item',
@@ -11,4 +12,6 @@ import {MatCardModule} from '@angular/material/card';
 })
 export class GameItem {
     @Input() game: Game = {} as Game;
+    
+    authService = inject(AuthService);
 }
