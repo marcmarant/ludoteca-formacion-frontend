@@ -44,6 +44,45 @@ export class AuthorList implements OnInit {
         this.loadPage();
     }
 
+    createAuthor() {
+        const dialogRef = this.dialog.open(AuthorEdit, {
+            data: {},
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+            this.pageNumber = Math.ceil((this.totalElements + 1) / this.pageSize) - 1;
+            this.loadPage();
+        });
+    }
+
+    editAuthor(author: Author) {
+        const dialogRef = this.dialog.open(AuthorEdit, {
+            data: { author: author },
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+            this.ngOnInit();
+        });
+    }
+
+    deleteAuthor(author: Author) {
+        const dialogRef = this.dialog.open(DialogConfirmation, {
+            data: {
+                title: 'Eliminar autor',
+                description:
+                    'Atención si borra el autor se perderán sus datos.<br> ¿Desea eliminar el autor?',
+            },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.authorService.deleteAuthor(author.id).subscribe(
+                    () => this.ngOnInit(),
+                );
+            }
+        });
+    }
+
     loadPage(event?: PageEvent) {
         const pageable: Pageable = {
             pageNumber: this.pageNumber,
@@ -66,44 +105,6 @@ export class AuthorList implements OnInit {
             this.pageNumber = data.pageable.pageNumber;
             this.pageSize = data.pageable.pageSize;
             this.totalElements = data.totalElements;
-        });
-    }
-
-    createAuthor() {
-        const dialogRef = this.dialog.open(AuthorEdit, {
-            data: {},
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            this.ngOnInit();
-        });
-    }
-
-    editAuthor(author: Author) {
-        const dialogRef = this.dialog.open(AuthorEdit, {
-            data: { author: author },
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            this.ngOnInit();
-        });
-    }
-
-    deleteAuthor(author: Author) {
-        const dialogRef = this.dialog.open(DialogConfirmation, {
-            data: {
-                title: 'Eliminar autor',
-                description:
-                    'Atención si borra el autor se perderán sus datos.<br> ¿Desea eliminar el autor?',
-            },
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-                this.authorService.deleteAuthor(author.id).subscribe(
-                    () => this.ngOnInit(),
-                );
-            }
         });
     }
 }
