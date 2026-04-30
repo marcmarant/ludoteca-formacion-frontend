@@ -30,11 +30,11 @@
             <div class="header_auth">
                 @if(authService.isAuthenticated()) {
                     <button mat-button (click)="onLogout()">
-                        <mat-icon>logout</mat-icon> Logout
+                        <mat-icon>logout</mat-icon> Cerrar Sesión
                     </button>
                 } @else {
                     <a routerLink="/auth" routerLinkActive="active">
-                        <mat-icon>account_circle</mat-icon> Sign in
+                        <mat-icon>account_circle</mat-icon> Iniciar Sesión
                     </a>
                 }
             </div>

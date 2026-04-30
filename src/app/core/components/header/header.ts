@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '@/app/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogConfirmation } from '@/app/core/components/dialog-confirmation';
 
 @Component({
     selector: 'app-header',
@@ -17,9 +19,22 @@ import { AuthService } from '@/app/auth/auth.service';
     styleUrl: './header.scss'
 })
 export class Header {
-    authService = inject(AuthService);
+    constructor(
+        public authService: AuthService,
+        public dialog: MatDialog,
+        public router: Router
+    ) {}
 
-    onLogout(): void {
-        this.authService.logout();
+    onLogout() {    
+        const dialogRef = this.dialog.open(DialogConfirmation, {
+            data: { title: "Cerrar Sesión", description: "¿Está seguro de que desea cerrar la sesión?" }
+        });
+    
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.authService.logout();
+                this.router.navigate(['/']);
+            }
+        });
     }
 }
