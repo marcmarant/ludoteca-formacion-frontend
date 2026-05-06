@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -18,6 +19,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ClientService } from '@/app/client/client.service';
 import { Client } from '@/app/client/model/client';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
     selector: 'app-loan-list',
@@ -30,7 +33,9 @@ import { Client } from '@/app/client/model/client';
         FormsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatSelectModule
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     templateUrl: './loan-list.html',
     styleUrl: './loan-list.scss',
@@ -53,28 +58,70 @@ export class LoanList implements OnInit {
         private loanService: LoanService,
         private clientService: ClientService,
         public authService: AuthService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public route: ActivatedRoute,
+        public router: Router
     ) {}
 
     ngOnInit(): void {
-        this.clientService
-            .getClients()
-            .subscribe((clients) => (this.clients = clients));
+        this.clientService.getClients().subscribe((clients) => {
+            this.clients = clients
 
-        this.loadPage();
+            this.route.queryParams.subscribe((params) => {
+                this.filterTitle = params['title'] ?? '';
+                this.filterClientId = params['clientId'] ? Number(params['clientId']) : undefined;
+                this.filterDate = params['date'] ?? '';
+
+                this.loadPage();
+            });
+        });
     }
-
+    
     onCleanFilter(): void {
         this.filterTitle = '';
         this.filterClientId = undefined;
         this.filterDate = '';
         this.pageNumber = 0;
+        this.updateUrlParams();
         this.loadPage();
     }
 
     onSearch(): void {
+        this.updateUrlParams();
         this.pageNumber = 0;
         this.loadPage();
+    }
+
+    createLoan() {
+        const dialogRef = this.dialog.open(LoanEdit, {
+            data: {},
+        });
+
+        dialogRef.afterClosed().subscribe(() => this.loadPage());
+    }
+
+    editLoan(loan: Loan) {
+        const dialogRef = this.dialog.open(LoanEdit, {
+            data: { loan: loan },
+        });
+
+        dialogRef.afterClosed().subscribe(() => this.loadPage());
+    }
+
+    deleteLoan(loan: Loan) {
+        const dialogRef = this.dialog.open(DialogConfirmation, {
+            data: {
+                title: 'Eliminar préstamo',
+                description:
+                    'Atención si borra el préstamo se perderán sus datos.<br> ¿Desea eliminar el préstamo?',
+            },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.loanService.deleteLoan(loan.id).subscribe(() => this.loadPage());
+            }
+        });
     }
 
     loadPage(event?: PageEvent) {
@@ -109,35 +156,20 @@ export class LoanList implements OnInit {
             });
     }
 
-    createLoan() {
-        const dialogRef = this.dialog.open(LoanEdit, {
-            data: {},
-        });
+    updateUrlParams() {
+        const title = this.filterTitle;
+        const clientId = this.filterClientId;
+            this.filterClientId != null ? this.filterClientId : undefined;
+        const date = this.filterDate;
 
-        dialogRef.afterClosed().subscribe(() => this.loadPage());
-    }
-
-    editLoan(loan: Loan) {
-        const dialogRef = this.dialog.open(LoanEdit, {
-            data: { loan: loan },
-        });
-
-        dialogRef.afterClosed().subscribe(() => this.loadPage());
-    }
-
-    deleteLoan(loan: Loan) {
-        const dialogRef = this.dialog.open(DialogConfirmation, {
-            data: {
-                title: 'Eliminar préstamo',
-                description:
-                    'Atención si borra el préstamo se perderán sus datos.<br> ¿Desea eliminar el préstamo?',
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+                title: title || null,
+                clientId: clientId || null,
+                date: date || null,
             },
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-                this.loanService.deleteLoan(loan.id).subscribe(() => this.loadPage());
-            }
+            queryParamsHandling: 'merge',
         });
     }
 }

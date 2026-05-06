@@ -9,6 +9,18 @@
 			margin-right: 20px;
 		}
 
+		.date_field {
+			cursor: pointer;
+
+			input {
+				cursor: pointer;
+			}
+		}
+
+		.mat-datepicker-toggle {
+			padding-right: 5px;
+		}
+
 		.buttons {
 			flex: auto;
 			align-self: center;

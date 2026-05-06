@@ -23,9 +23,18 @@
 				</mat-select>
 			</mat-form-field>
 
-			<mat-form-field>
-				<mat-label>Fecha préstamo</mat-label>
-				<input type="date" matInput [(ngModel)]="filterDate" name="date" />
+			<mat-form-field (click)="datePicker.open()" class="date_field">
+				<mat-label>Fecha</mat-label>
+				<input
+					#dateInput
+					matInput
+					[matDatepicker]="datePicker"
+					[(ngModel)]="filterDate"
+					name="date"
+					readonly
+				/>
+				<mat-datepicker-toggle matSuffix [for]="datePicker" />
+				<mat-datepicker #datePicker />
 			</mat-form-field>
 		</form>
 
