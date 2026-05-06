@@ -5,7 +5,7 @@
 		<h1>Crear préstamo</h1>
 	}
 
-	<form>
+	<form #loanForm="ngForm">
 		<mat-form-field>
 			<mat-label>Identificador</mat-label>
 			<input
@@ -38,29 +38,31 @@
 			<mat-error>El cliente no puede estar vacío</mat-error>
 		</mat-form-field>
 
-		<mat-form-field>
-			<mat-label>Fecha préstamo</mat-label>
-			<input
-				type="date"
-				matInput
-				[(ngModel)]="loan.loanDate"
-				name="loanDate"
-				required
-			/>
-			<mat-error>La fecha de préstamo no puede estar vacía</mat-error>
-		</mat-form-field>
+		<div class="field_row">
+			<mat-form-field>
+				<mat-label>Fecha préstamo</mat-label>
+				<input
+					type="date"
+					matInput
+					[(ngModel)]="loan.loanDate"
+					name="loanDate"
+					required
+				/>
+				<mat-error>La fecha no puede estar vacía</mat-error>
+			</mat-form-field>
 
-		<mat-form-field>
-			<mat-label>Fecha devolución</mat-label>
-			<input
-				type="date"
-				matInput
-				[(ngModel)]="loan.returnDate"
-				name="returnDate"
-				required
-			/>
-			<mat-error>La fecha de devolución no puede estar vacía</mat-error>
-		</mat-form-field>
+			<mat-form-field>
+				<mat-label>Fecha devolución</mat-label>
+				<input
+					type="date"
+					matInput
+					[(ngModel)]="loan.returnDate"
+					name="returnDate"
+					required
+				/>
+				<mat-error>La fecha no puede estar vacía</mat-error>
+			</mat-form-field>
+		</div>
 	</form>
 
 	@if (apiErrorMessage()) {
@@ -69,6 +71,12 @@
 
 	<div class="buttons">
 		<button mat-stroked-button (click)="onClose()">Cerrar</button>
-		<button mat-flat-button color="primary" (click)="onSave()">Guardar</button>
+		<button
+			mat-flat-button color="primary"
+			(click)="onSave(loanForm)"
+			[disabled]="loanForm.invalid"
+		>
+			Guardar
+		</button>
 	</div>
 </div>

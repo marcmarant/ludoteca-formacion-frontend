@@ -1,6 +1,6 @@
 import { Component, Inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +35,9 @@ export class ClientEdit {
         this.client = this.data.client ? Object.assign({}, this.data.client) : {} as Client;
     }
 
-    onSave(): void {
+    onSave(form: NgForm): void {
+        if (form.invalid) return;
+
         this.apiErrorMessage.set('');
 
         this.clientService.saveClient(this.client).subscribe({

@@ -7,6 +7,23 @@
 		display: flex;
 		flex-direction: column;
 		margin-bottom: 20px;
+
+		.field_row {
+			display: flex;
+			gap: 10px;
+		}
+
+		.date_field {
+			cursor: pointer;
+
+			input {
+				cursor: pointer;
+			}
+		}
+
+		.mat-datepicker-toggle {
+			padding-right: 5px;
+		}
 	}
 
 	.api-error {

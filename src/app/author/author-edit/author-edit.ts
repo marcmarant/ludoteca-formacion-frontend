@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthorService } from '../author.service';
 import { Author } from '../model/author';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -31,7 +31,9 @@ export class AuthorEdit implements OnInit {
         this.author = this.data.author ? Object.assign({}, this.data.author) : {} as Author;
     }
 
-    onSave(): void {
+    onSave(form: NgForm): void {
+        if (form.invalid) return;
+        
         this.apiErrorMessage.set('');
 
         this.authorService.saveAuthor(this.author).subscribe({

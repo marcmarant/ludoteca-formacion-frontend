@@ -6,7 +6,7 @@ import { AuthorService } from '@/app/author/author.service';
 import { Author } from '@/app/author/model/author';
 import { CategoryService } from '@/app/category/category.service';
 import { Category } from '@/app/category/model/category';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -65,7 +65,9 @@ export class GameEdit implements OnInit {
         });
     }
 
-    onSave(): void {
+    onSave(form: NgForm): void {
+        if (form.invalid) return;
+        
         this.apiErrorMessage.set('');
 
         this.gameService.saveGame(this.game).subscribe({
