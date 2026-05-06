@@ -38,7 +38,7 @@ export class AuthorEdit implements OnInit {
 
         this.authorService.saveAuthor(this.author).subscribe({
             next: () => {
-                this.dialogRef.close();
+                this.dialogRef.close(true);
             },
             error: (error: HttpErrorResponse) => {
                 this.apiErrorMessage.set(getErrorMessage(error));
