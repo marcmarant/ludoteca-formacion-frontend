@@ -20,6 +20,13 @@
                     <button mat-icon-button color="primary" (click)="editCategory(element)">
                         <mat-icon>edit</mat-icon>
                     </button>
+                }
+                @if (element.hasGames) {
+                    <button mat-icon-button color="accent" (click)="redirectToGames(element)">
+                        <mat-icon>input</mat-icon>
+                    </button>
+                }
+                @else if (this.authService.isAuthenticated()) {
                     <button mat-icon-button color="accent" (click)="deleteCategory(element)">
                         <mat-icon>clear</mat-icon>
                     </button>

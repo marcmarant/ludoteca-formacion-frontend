@@ -8,5 +8,6 @@ export const routes: Routes = [
     { path: 'authors', loadComponent: () => import('@/app/author/author-list').then(m => m.AuthorList)},
     { path: 'games', loadComponent: () => import('@/app/game/game-list').then(m => m.GameList)},
     { path: 'clients', canActivate: [authGuard], loadComponent: () => import('@/app/client/client-list').then(m => m.ClientList)},
-    { path: 'loans', canActivate: [authGuard], loadComponent: () => import('@/app/loan/loan-list').then(m => m.LoanList)}
+    { path: 'loans', canActivate: [authGuard], loadComponent: () => import('@/app/loan/loan-list').then(m => m.LoanList)},
+    { path: 'users', canActivate: [authGuard], loadComponent: () => import('@/app/user/user-list').then(m => m.UserList)}
 ];

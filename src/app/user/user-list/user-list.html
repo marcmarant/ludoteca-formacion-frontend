@@ -1,0 +1,46 @@
+<div class="container">
+    <h1>Listado de Usuarios</h1>
+
+    <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> Identificador </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+            <mat-header-cell *matHeaderCellDef> Nombre usuario  </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+            <mat-header-cell *matHeaderCellDef> Rol </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-select
+                    [value]="element.role"
+                    (selectionChange)="switchUserRole(element, $event.value)">
+                    <mat-option *ngFor="let role of roles" [value]="role">
+                        {{ getRoleName(role) }}
+                    </mat-option>
+                </mat-select>
+            </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button mat-icon-button color="accent" (click)="deleteUser(element)">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    @if (this.authService.isAuthenticated()) {
+        <div class="buttons">
+            <button mat-flat-button color="primary" (click)="createUser()">Nuevo usuario</button>
+        </div>
+    }
+</div>

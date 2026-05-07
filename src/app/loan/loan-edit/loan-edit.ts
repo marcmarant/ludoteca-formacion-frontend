@@ -76,7 +76,7 @@ export class LoanEdit implements OnInit {
 
         this.loanService.saveLoan(this.loan).subscribe({
             next: () => {
-                this.dialogRef.close();
+                this.dialogRef.close(true);
             },
             error: (error: HttpErrorResponse) => {
                 this.apiErrorMessage.set(getErrorMessage(error));

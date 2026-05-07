@@ -97,7 +97,12 @@ export class LoanList implements OnInit {
             data: {},
         });
 
-        dialogRef.afterClosed().subscribe(() => this.loadPage());
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.pageNumber = Math.ceil((this.totalElements + 1) / this.pageSize) - 1;
+                this.loadPage();
+            }
+        });
     }
 
     editLoan(loan: Loan) {

@@ -35,6 +35,18 @@ export class AuthService {
         localStorage.removeItem(environment.tokenStorageKey);
     }
 
+    getCurrentUsername(): string | null {
+        const token = localStorage.getItem(environment.tokenStorageKey);
+        if (!token) return null;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.username ?? payload.sub ?? null;
+        } catch {
+            return null;
+        }
+    }
+
     private readInitialState(): boolean {
         return!!localStorage.getItem(environment.tokenStorageKey);
     }

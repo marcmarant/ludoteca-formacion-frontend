@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GameEdit } from '../game-edit';
 import { GameService } from '../game.service';
@@ -16,6 +17,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { GameItem } from './game-item/game-item';
 import { AuthService } from '@/app/auth/auth.service';
 
+/**
+ * Componente que muestra la lista de juegos, con opciones de filtrado por título y categoría, y permite crear o editar juegos.
+ * 
+ * TODO mejorar este texto y añadir documentación al resto de componentes
+ */
 @Component({
     selector: 'app-game-list',
     standalone: true,
@@ -43,15 +49,25 @@ export class GameList implements OnInit {
         private gameService: GameService,
         private categoryService: CategoryService,
         public authService: AuthService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public route: ActivatedRoute,
+        public router: Router
     ) {}
 
     ngOnInit(): void {
-        this.gameService.getGames().subscribe((games) => this.games.set(games));
+        this.categoryService.getCategories().subscribe((categories) => {
+            this.categories = categories
 
-        this.categoryService
-            .getCategories()
-            .subscribe((categories) => (this.categories = categories));
+            this.route.queryParams.subscribe((params) => {
+                this.filterTitle = params['title'] ?? '';
+                const categoryId = params['categoryId'] ? Number(params['categoryId']) : undefined;
+                this.filterCategory = this.categories.find(c => c.id === categoryId) || {} as Category;
+
+                this.gameService.getGames(this.filterTitle, categoryId).subscribe((games) => {
+                    this.games.set(games);
+                });
+            });
+        });
     }
 
     onCleanFilter(): void {
@@ -65,6 +81,15 @@ export class GameList implements OnInit {
         const categoryId =
             this.filterCategory != null ? this.filterCategory.id : undefined;
 
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+                title: title || null,
+                categoryId: categoryId || null,
+            },
+            queryParamsHandling: 'merge',
+        });
+
         this.gameService
             .getGames(title, categoryId)
             .subscribe((games) => this.games.set(games));
@@ -75,7 +100,7 @@ export class GameList implements OnInit {
             data: {},
         });
 
-        dialogRef.afterClosed().subscribe((result) => {
+        dialogRef.afterClosed().subscribe(() => {
             this.ngOnInit();
         });
     }

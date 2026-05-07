@@ -29,6 +29,9 @@
 
             <div class="header_auth">
                 @if(authService.isAuthenticated()) {
+                    <a routerLink="/users" routerLinkActive="active">
+                        <mat-icon>people</mat-icon> Usuarios
+                    </a>
                     <button mat-button (click)="onLogout()">
                         <mat-icon>logout</mat-icon> Cerrar Sesión
                     </button>
