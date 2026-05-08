@@ -1,0 +1,54 @@
+<div class="container">
+	<h1>Crear usuario</h1>
+
+	<form #userForm="ngForm">
+		<mat-form-field>
+			<mat-label>Nombre de usuario</mat-label>
+			<input
+				type="text"
+				matInput
+				placeholder="Nombre de usuario"
+				[(ngModel)]="user.username"
+				name="username"
+				required>
+			<mat-error>El nombre de usuario es obligatorio</mat-error>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Contraseña</mat-label>
+			<input
+				type="password"
+				matInput
+				placeholder="Contraseña"
+				[(ngModel)]="user.password"
+				name="password"
+				required>
+			<mat-error>La contraseña es obligatoria</mat-error>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Rol</mat-label>
+			<mat-select [(ngModel)]="user.role" name="role" required>
+				<mat-option *ngFor="let role of roles" [value]="role">
+					{{ getRoleName(role) }}
+				</mat-option>
+			</mat-select>
+			<mat-error>El rol es obligatorio</mat-error>
+		</mat-form-field>
+	</form>
+
+	@if (apiErrorMessage()) {
+		<div class="api-error">{{ apiErrorMessage() }}</div>
+	}
+
+	<div class="buttons">
+		<button mat-stroked-button (click)="onClose()">Cerrar</button>
+		<button
+			mat-flat-button color="primary"
+			(click)="createUser(userForm)"
+			[disabled]="userForm.invalid"
+		>
+			Guardar
+		</button>
+	</div>
+</div>

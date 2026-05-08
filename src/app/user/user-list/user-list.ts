@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -7,11 +6,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogConfirmation } from '@/app/core/components/dialog-confirmation';
+import { UserCreate } from '../user-create';
 import { UserService } from '../user.service';
 import { User } from '../model/user';
 import { Role, getRoleName } from '../model/role';
 import { AuthService } from '@/app/auth/auth.service';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-user-list',
@@ -32,39 +32,51 @@ export class UserList implements OnInit {
 
     roles = Object.values(Role) as Role[];
     getRoleName = getRoleName;
+    private roleByUserId: Record<number, Role> = {};
+    private updatingRoleUserIds = new Set<number>();
 
     constructor(
         private userService: UserService,
         public authService: AuthService,
-        public dialog: MatDialog,
-        public router: Router
+        public dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
         this.userService.getUsers().subscribe((users) => {
-            console.log(users);
             this.dataSource.data = users;
+            this.roleByUserId = Object.fromEntries(
+                users.map((user) => [user.id, user.role])
+            ) as Record<number, Role>;
         });
     }
 
-    // ESTO AUN NO ESTA IMPLEMENTADO
+    displayedRole(user: User): Role {
+        return this.roleByUserId[user.id] ?? user.role;
+    }
+
+    isRoleUpdating(user: User): boolean {
+        return this.updatingRoleUserIds.has(user.id);
+    }
+
     isCurrentUser(user: User): boolean {
         return user.username === this.authService.getCurrentUsername();
     }
 
-    createUser() {}
-    /*createUser() {
-        const dialogRef = this.dialog.open(UserEdit, {
+    createUser() {
+        const dialogRef = this.dialog.open(UserCreate, {
             data: {}
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            this.ngOnInit();
-        });    
-    }*/
+        dialogRef.afterClosed().subscribe(() => this.ngOnInit());
+    }
 
-    switchUserRole(user: User, role: Role) {
-        if (user.role === role || !user.id) return;
+    switchUserRole(user: User, change: MatSelectChange) {
+        const role = change.value as Role;
+        const previousRole = this.displayedRole(user);
+
+        change.source.value = previousRole;
+
+        if (previousRole === role || !user.id || this.isRoleUpdating(user)) return;
 
         const dialogRef = this.dialog.open(DialogConfirmation, {
             data: {
@@ -75,9 +87,14 @@ export class UserList implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.userService.updateUserRole(user.id, role).subscribe(() => this.ngOnInit());
-            } else {
-                this.ngOnInit();
+                setTimeout(() => {
+                    this.updatingRoleUserIds.add(user.id);
+                    this.userService.updateUserRole(user.id, role).subscribe({
+                        next: () => this.ngOnInit(),
+                        error: () => this.updatingRoleUserIds.delete(user.id),
+                        complete: () => this.updatingRoleUserIds.delete(user.id),
+                    });
+                }, 0);
             }
         });
     }

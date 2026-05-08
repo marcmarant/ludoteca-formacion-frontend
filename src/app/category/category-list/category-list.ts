@@ -46,9 +46,7 @@ export class CategoryList implements OnInit {
             data: {}
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            this.ngOnInit();
-        });    
+        dialogRef.afterClosed().subscribe(() =>this.ngOnInit());    
     }
 
     editCategory(category: Category) {

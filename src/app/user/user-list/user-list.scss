@@ -19,6 +19,21 @@
       font-size: large;
     }
 
+    .current_user_row {
+      background-color: #d0e6ff;
+      font-weight: 600;
+    }
+
+    .current_user_indicator {
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background-color: #1976d2;
+      color: white;
+      font-size: 12px;
+      font-weight: semi-bold;
+    }
+
     .mat-column-id {
       flex: 0 0 20%;
       justify-content: center;

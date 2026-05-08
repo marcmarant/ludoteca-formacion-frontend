@@ -9,15 +9,21 @@
 
         <ng-container matColumnDef="username">
             <mat-header-cell *matHeaderCellDef> Nombre usuario  </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
+            <mat-cell *matCellDef="let element">
+                <span>{{ element.username }}</span>
+                @if (isCurrentUser(element)) {
+                    <span class="current_user_indicator">TÚ</span>
+                }
+            </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="role">
             <mat-header-cell *matHeaderCellDef> Rol </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select
-                    [value]="element.role"
-                    (selectionChange)="switchUserRole(element, $event.value)">
+                    [value]="displayedRole(element)"
+                    [disabled]="isRoleUpdating(element)"
+                    (selectionChange)="switchUserRole(element, $event)">
                     <mat-option *ngFor="let role of roles" [value]="role">
                         {{ getRoleName(role) }}
                     </mat-option>
@@ -35,7 +41,10 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            [class.current_user_row]="isCurrentUser(row)">
+        </mat-row>
     </mat-table>
 
     @if (this.authService.isAuthenticated()) {
