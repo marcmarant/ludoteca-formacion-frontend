@@ -22,8 +22,10 @@
 				placeholder="Contraseña"
 				[(ngModel)]="user.password"
 				name="password"
-				required>
-			<mat-error>La contraseña es obligatoria</mat-error>
+				required
+				minlength="5"
+				#password="ngModel">
+			<mat-error>La contraseña debe tener al menos 5 caracteres</mat-error>
 		</mat-form-field>
 
 		<mat-form-field>

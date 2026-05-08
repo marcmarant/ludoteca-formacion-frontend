@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import environment from '@/enviroment';
+import { Role } from '@/app/user/model/role';
 
 export interface AuthRequest {
     username: string;
@@ -35,13 +36,29 @@ export class AuthService {
         localStorage.removeItem(environment.tokenStorageKey);
     }
 
+    getCurrentRole(): Role | null {
+        const payload = this.getTokenPayload();
+        return (payload?.role ?? payload?.roles?.[0] ?? null) as Role | null;
+    }
+
+    isAdmin(): boolean {
+        return this.getCurrentRole() === Role.ROLE_ADMIN;
+    }
+
     getCurrentUsername(): string | null {
+        const payload = this.getTokenPayload();
+        return payload?.username ?? payload?.sub ?? null;
+    }
+
+    private getTokenPayload(): any | null {
         const token = localStorage.getItem(environment.tokenStorageKey);
         if (!token) return null;
 
         try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return payload.username ?? payload.sub ?? null;
+            const raw = token.split('.')[1];
+            if (!raw) return null;
+            const normalized = raw.replace(/-/g, '+').replace(/_/g, '/');
+            return JSON.parse(atob(normalized));
         } catch {
             return null;
         }

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@/app/core/guards/auth.guard';
+import { adminGuard } from '@/app/core/guards/admin.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/games', pathMatch: 'full'},
@@ -9,5 +10,5 @@ export const routes: Routes = [
     { path: 'games', loadComponent: () => import('@/app/game/game-list').then(m => m.GameList)},
     { path: 'clients', canActivate: [authGuard], loadComponent: () => import('@/app/client/client-list').then(m => m.ClientList)},
     { path: 'loans', canActivate: [authGuard], loadComponent: () => import('@/app/loan/loan-list').then(m => m.LoanList)},
-    { path: 'users', canActivate: [authGuard], loadComponent: () => import('@/app/user/user-list').then(m => m.UserList)}
+    { path: 'users', canActivate: [adminGuard], loadComponent: () => import('@/app/user/user-list').then(m => m.UserList)}
 ];
