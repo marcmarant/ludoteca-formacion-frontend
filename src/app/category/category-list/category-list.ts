@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -31,8 +30,7 @@ export class CategoryList implements OnInit {
     constructor(
         private categoryService: CategoryService,
         public authService: AuthService,
-        public dialog: MatDialog,
-        public router: Router
+        public dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -71,7 +69,4 @@ export class CategoryList implements OnInit {
         });
     }
 
-    redirectToGames(category: Category) {
-        this.router.navigate(['/games'], { queryParams: { categoryId: category.id } });
-    }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -31,8 +30,7 @@ export class ClientList implements OnInit {
     constructor(
         private clientService: ClientService,
         public authService: AuthService,
-        public dialog: MatDialog,
-        public router: Router
+        public dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -72,7 +70,4 @@ export class ClientList implements OnInit {
         });
     }
 
-    redirectToLoans(client: Client) {
-        this.router.navigate(['/loans'], { queryParams: { clientId: client.id } });
-    }
 }
