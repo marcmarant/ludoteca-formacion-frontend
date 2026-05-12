@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { AuthorEdit } from '../author-edit';
 import { AuthorService } from '../author.service';
 import { Author } from '../model/author';
@@ -37,7 +38,8 @@ export class AuthorList implements OnInit {
     constructor(
         private authorService: AuthorService,
         public authService: AuthService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public router: Router
     ) {}
 
     ngOnInit(): void {
@@ -83,6 +85,10 @@ export class AuthorList implements OnInit {
                 );
             }
         });
+    }
+
+    redirectToGames(author: Author) {
+        this.router.navigate(['/games'], { queryParams: { author: author.name } });
     }
 
     loadPage(event?: PageEvent) {
