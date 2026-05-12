@@ -1,59 +1,47 @@
-# Catalogo
+# Ludoteca Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+Frontend en Angular para la app de gestión de una ludoteca. Esta es la rama principal que incluye lo pedido en el tutorial más algunas funcionalidades extra, si bien había algunas funcionalidades que entraban en conflicto con lo pedido en el tutorial, por lo que he decidido añadirlas solo en la rama [extra-features](https://github.com/marcmarant/ludoteca-formacion-frontend/tree/extra-features).
 
-## Development server
+## Funcionalidades añadidas
 
-To start a local development server, run:
+### Autenticación y control de acceso
 
-```bash
-ng serve
-```
+- Inicio de sesión para usuarios.
+- Cierre de sesión con confirmación.
+- Roles para los usaurios (teniendo el rol empleado y administrador).
+- Persistencia de sesión mediante token guardado en `localStorage`.
+- Protección de operaciones de edición para usuarios no autenticados.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Interceptores HTTP
 
-## Code scaffolding
+- Interceptor de autenticación que añade el token en cada petición.
+- Interceptor de errores con mensajes específicos para:
+	- `401`: sesión expirada
+	- `403`: operación no permitida
+	- `500`: error interno
+- Gestión centralizada de errores para evitar duplicar lógica en formularios y servicios.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Gestión de usuarios
 
-```bash
-ng generate component component-name
-```
+- Nuevoa página destinada a la gestión de usuarios
+- Creación de nuevos perfiles de usuarios
+- Solo esta disponible para usuarios con rol administrador
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Tecnologías
 
-```bash
-ng generate --help
-```
+- Angular 21
+- TypeScript
+- Angular Material
+- RxJS
 
-## Building
+## Estructura general
 
-To build the project run:
+- `src/app/auth`: autenticación y sesión
+- `src/app/core`: guards, interceptores y componentes compartidos
+- `src/app/author`: gestión de autores
+- `src/app/category`: gestión de categorías
+- `src/app/game`: catálogo y edición de juegos
+- `src/app/client`: gestión de clientes
+- `src/app/loan`: gestión de préstamos
+- `src/app/user`: gestión de usuarios
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { HttpErrorResponse } from '@angular/common/http';
 import { getErrorMessage } from '@/app/core/utils/http-error';
 
-
 @Component({
     selector: 'app-author-edit',
     standalone: true,
