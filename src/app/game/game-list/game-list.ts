@@ -17,11 +17,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { GameItem } from './game-item/game-item';
 import { AuthService } from '@/app/auth/auth.service';
 
-/**
- * Componente que muestra la lista de juegos, con opciones de filtrado por título y categoría, y permite crear o editar juegos.
- * 
- * TODO mejorar este texto y añadir documentación al resto de componentes
- */
 @Component({
     selector: 'app-game-list',
     standalone: true,
