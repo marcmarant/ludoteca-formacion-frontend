@@ -11,12 +11,14 @@
 					placeholder="Título del juego"
 					[(ngModel)]="filterTitle"
 					name="title"
+					(blur)="onSearch()"
+					(keydown.enter)="onSearch()"
 				/>
 			</mat-form-field>
 
 			<mat-form-field>
 				<mat-label>Cliente</mat-label>
-				<mat-select [(ngModel)]="filterClientId" name="clientId">
+				<mat-select [(ngModel)]="filterClientId" name="clientId" (selectionChange)="onSearch()">
 					@for (client of clients; track client.id) {
 						<mat-option [value]="client.id">{{ client.name }}</mat-option>
 					}
@@ -32,6 +34,7 @@
 					[(ngModel)]="filterDate"
 					name="date"
 					readonly
+					(dateChange)="onSearch()"
 				/>
 				<mat-datepicker-toggle matSuffix [for]="datePicker" />
 				<mat-datepicker #datePicker />
@@ -39,8 +42,7 @@
 		</form>
 
 		<div class="buttons">
-			<button mat-stroked-button (click)="onCleanFilter()">Limpiar</button>
-			<button mat-stroked-button (click)="onSearch()">Filtrar</button>
+			<button mat-stroked-button (click)="onCleanFilter()">Limpiar filtros</button>
 		</div>
 	</div>
 

@@ -44,6 +44,7 @@ export class GameList implements OnInit {
     games = signal<Game[]>([]);
     filterCategory: Category = {} as Category;
     filterTitle = '';
+    filterAuthor = '';
 
     constructor(
         private gameService: GameService,
@@ -60,10 +61,11 @@ export class GameList implements OnInit {
 
             this.route.queryParams.subscribe((params) => {
                 this.filterTitle = params['title'] ?? '';
+                this.filterAuthor = params['author'] ?? '';
                 const categoryId = params['categoryId'] ? Number(params['categoryId']) : undefined;
                 this.filterCategory = this.categories.find(c => c.id === categoryId) || {} as Category;
 
-                this.gameService.getGames(this.filterTitle, categoryId).subscribe((games) => {
+                this.gameService.getGames(this.filterTitle, categoryId, this.filterAuthor).subscribe((games) => {
                     this.games.set(games);
                 });
             });
@@ -72,12 +74,14 @@ export class GameList implements OnInit {
 
     onCleanFilter(): void {
         this.filterTitle = '';
+        this.filterAuthor = '';
         this.filterCategory = {} as Category;
         this.onSearch();
     }
 
     onSearch(): void {
         const title = this.filterTitle;
+        const author = this.filterAuthor;
         const categoryId =
             this.filterCategory != null ? this.filterCategory.id : undefined;
 
@@ -85,13 +89,14 @@ export class GameList implements OnInit {
             relativeTo: this.route,
             queryParams: {
                 title: title || null,
+                author: author || null,
                 categoryId: categoryId || null,
             },
             queryParamsHandling: 'merge',
         });
 
         this.gameService
-            .getGames(title, categoryId)
+            .getGames(title, categoryId, author)
             .subscribe((games) => this.games.set(games));
     }
 

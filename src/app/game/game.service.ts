@@ -12,8 +12,8 @@ export class GameService {
 
     private baseUrl = `${environment.apiUrl}/games`;
 
-    getGames(title?: string, categoryId?: number): Observable<Game[]> {
-        return this.http.get<Game[]>(this.composeFindUrl(title, categoryId));
+    getGames(title?: string, categoryId?: number, author?: string): Observable<Game[]> {
+        return this.http.get<Game[]>(this.composeFindUrl(title, categoryId, author));
     }
 
     saveGame(game: Game): Observable<void> {
@@ -24,11 +24,14 @@ export class GameService {
         return this.http.put<void>(`${this.baseUrl}/${id}`, game);
     }
 
-    private composeFindUrl(title?: string, categoryId?: number): string {
+    private composeFindUrl(title?: string, categoryId?: number, author?: string): string {
         const params = new URLSearchParams();
         if (title) {
           params.set('title', title);
         }  
+        if (author) {
+            params.set('author', author);
+        }
         if (categoryId) {
             params.set('idCategory', categoryId.toString());
         }
