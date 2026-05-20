@@ -20,7 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ClientService } from '@/app/client/client.service';
 import { Client } from '@/app/client/model/client';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_FORMATS } from '@angular/material/core';
 
 @Component({
     selector: 'app-loan-list',
@@ -37,6 +37,22 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatDatepickerModule,
         MatNativeDateModule
     ],
+    providers: [
+        {
+            provide: MAT_DATE_FORMATS,
+            useValue: {
+                parse: {
+                    dateInput: 'DD/MM/YYYY',
+                },
+                display: {
+                    dateInput: 'DD/MM/YYYY',
+                    monthYearLabel: 'MMM YYYY',
+                    dateA11yLabel: 'LL',
+                    monthYearA11yLabel: 'MMMM YYYY',
+                },
+            },
+        },
+    ],
     templateUrl: './loan-list.html',
     styleUrl: './loan-list.scss',
 })
@@ -50,7 +66,7 @@ export class LoanList implements OnInit {
 
     filterTitle = '';
     filterClientId?: number;
-    filterDate = '';
+    filterDate?: Date;
 
     displayedColumns: string[] = ['id', 'title', 'client', 'loanDate', 'returnDate', 'action'];
 
@@ -70,7 +86,7 @@ export class LoanList implements OnInit {
             this.route.queryParams.subscribe((params) => {
                 this.filterTitle = params['title'] ?? '';
                 this.filterClientId = params['clientId'] ? Number(params['clientId']) : undefined;
-                this.filterDate = params['date'] ?? '';
+                this.filterDate = params['date'] ? new Date(params['date']) : undefined;
 
                 this.loadPage();
             });
@@ -80,7 +96,7 @@ export class LoanList implements OnInit {
     onCleanFilter(): void {
         this.filterTitle = '';
         this.filterClientId = undefined;
-        this.filterDate = '';
+        this.filterDate = undefined;
         this.pageNumber = 0;
         this.updateUrlParams();
         this.loadPage();
@@ -151,7 +167,7 @@ export class LoanList implements OnInit {
                 pageable,
                 this.filterTitle || undefined,
                 this.filterClientId,
-                this.filterDate || undefined
+                this.filterDate ? new Date(this.filterDate).toISOString() : undefined
             )
             .subscribe((data) => {
                 this.loans.set(data.content);
@@ -164,8 +180,7 @@ export class LoanList implements OnInit {
     updateUrlParams() {
         const title = this.filterTitle;
         const clientId = this.filterClientId;
-            this.filterClientId != null ? this.filterClientId : undefined;
-        const date = this.filterDate;
+        const date = this.filterDate ? this.filterDate.toISOString() : null;
 
         this.router.navigate([], {
             relativeTo: this.route,
