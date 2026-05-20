@@ -49,7 +49,7 @@
 	<mat-table [dataSource]="loans()">
 		<ng-container matColumnDef="id">
 			<mat-header-cell *matHeaderCellDef>Número</mat-header-cell>
-			<mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </mat-cell>
+			<mat-cell *matCellDef="let element; let i = index"> {{ (pageNumber * pageSize) + i + 1 }} </mat-cell>
 		</ng-container>
 
 		<ng-container matColumnDef="title">
